@@ -15,11 +15,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+        jsonreader.cpp \
         princ.cpp \
         glarea.cpp
 
 HEADERS  += princ.h \
-        glarea.h
+        glarea.h \
+        jsonreader.h
 
 FORMS    += princ.ui
 
