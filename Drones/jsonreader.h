@@ -17,7 +17,6 @@ private:
     QVariantMap jsonMap;
     QString description;
     std::vector<std::vector<QVariantMap>> drones;
-
     int nbDrones;
 };
 

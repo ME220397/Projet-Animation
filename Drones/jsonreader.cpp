@@ -32,7 +32,7 @@ JsonReader::JsonReader(QString filePath)
     }
     int n = drones.size();
     assert(n == nbDrones);
-    show_waypoint();
+    //show_waypoint();
 }
 
 QVariantMap JsonReader::load_data(){

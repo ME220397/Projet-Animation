@@ -15,11 +15,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+        drone.cpp \
+        dronefactory.cpp \
         jsonreader.cpp \
         princ.cpp \
         glarea.cpp
 
 HEADERS  += princ.h \
+        drone.h \
+        dronefactory.h \
         glarea.h \
         jsonreader.h
 
