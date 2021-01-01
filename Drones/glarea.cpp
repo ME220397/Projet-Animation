@@ -7,7 +7,6 @@
 #include <QMatrix4x4>
 
 
-
 GLArea::GLArea(QWidget *parent) :
     QOpenGLWidget(parent)
 {
@@ -25,6 +24,8 @@ GLArea::GLArea(QWidget *parent) :
     connect (timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->start();
     elapsedTimer.start();
+
+    test = new DroneFactory(this);
 }
 
 
@@ -67,6 +68,9 @@ void GLArea::initializeGL()
         qWarning() << program_particule->log();
     }
     program_particule->setUniformValue("texture", 0);
+
+    //DroneFactory
+    test->init_shaders();
 }
 
 
@@ -152,6 +156,9 @@ void GLArea::makeGLObjects()
     if (image_particule.isNull())
         qDebug() << "load image puff.png failed";
     textures[1] = new QOpenGLTexture(image_particule);
+
+    test->loadMesh();
+    test->add_drone();
 }
 
 
@@ -159,6 +166,7 @@ void GLArea::tearGLObjects()
 {
     vbo_sol.destroy();
     vbo_particule.destroy();
+    test->delete_vbos();
     for (int i = 0; i < 2; i++)
         delete textures[i];
 }
@@ -236,6 +244,9 @@ void GLArea::paintGL()
     program_particule->disableAttributeArray("in_position");
     program_particule->disableAttributeArray("in_uv");
     program_particule->release();
+
+    // Affichage d'un drone
+    test->draw(projectionMatrix, viewMatrix);
 }
 
 

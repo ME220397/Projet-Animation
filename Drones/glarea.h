@@ -12,6 +12,7 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
+#include <dronefactory.h>
 
 class GLArea : public QOpenGLWidget,
                protected QOpenGLFunctions
@@ -53,6 +54,8 @@ private:
 
     void makeGLObjects();
     void tearGLObjects();
+
+    DroneFactory * test;
 };
 
 #endif // GLAREA_H
