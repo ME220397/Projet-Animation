@@ -54,6 +54,22 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
     // chargement du fichier .obj dans la variable globale "mesh"
     OpenMesh::IO::read_mesh(mesh, fileName.toUtf8().constData());
     resetAllColorsAndThickness(&mesh);
+
+    // Récupération des données du Json
+    reader = new JsonReader("./json/waypoints.json");
+    nb_drones = reader->get_nb_drones();
+    // On s'assure qu'il y a bien 20 drones comme dans le json
+    assert(nb_drones == 20);
+
+    QVector3D pos = reader->accessPosition(0, 0);
+    d = QVector3D(0,400,0) - pos;
+}
+
+void DroneFactory::create_drones(){
+    //Création des drones
+    for(int i = 0; i<nb_drones; i++){
+        add_drone(i);
+    }
 }
 
 void DroneFactory::resetAllColorsAndThickness(MyMesh* _mesh)
@@ -182,14 +198,19 @@ void DroneFactory::init_shaders(){
     }
 }
 
-void DroneFactory::add_drone(){
-    Drone d(QVector3D(0,5,0), 2.);
+void DroneFactory::add_drone(int id_drone){
+    QVector3D position_start = reader->accessPosition(id_drone, 0);
+    position_start +=d;
+    Drone d(position_start/40, 2.);
     d.init(program_mesh, program_line, vbo_mesh, vbo_line);
     drones.push_back(d);
 }
 
 void DroneFactory::draw(QMatrix4x4 projection, QMatrix4x4 view){
+    //vbo_line.bind();
+    //vbo_mesh.bind();
     for(Drone d: drones){
+        //d.init(program_mesh, program_line, vbo_mesh, vbo_line);
         d.draw(projection, view, n_edges*2, n_faces*3);
     }
 }

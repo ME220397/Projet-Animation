@@ -12,6 +12,5 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Princ w;
     w.show();
-    JsonReader js("./json/waypoints.json");
     return a.exec();
 }

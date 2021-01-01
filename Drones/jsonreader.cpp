@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include <QVector3D>
 
 using namespace std;
 
@@ -74,4 +75,27 @@ void JsonReader::show_waypoint(){
         cout << "\n";
         count++;
     }
+}
+
+QVariantMap JsonReader::get_waypoint_by_id(std::vector<QVariantMap> waypoints, int id){
+    return waypoints[id];
+}
+
+QVector3D JsonReader::accessPosition(int id_drone, int id_waypoint){
+    // Nous voulons acceder aux drones dans l'ordre croissant et non pas
+    // en commançant pas 20 comme dans le json
+    int id = (nbDrones-1) - id_drone;
+    // On récupère le waypoint associé au drone
+    QVariantMap waypoint = get_waypoint_by_id(drones[id], id_waypoint);
+    // On recupère la map de la position
+    QVariantMap position = waypoint["position"].toMap();
+
+    // On récupère les coordonnées de la position
+    float x, y, z;
+
+    x = position["lng_X"].toFloat();
+    y = position["alt_Y"].toFloat();
+    z = position["lat_Z"].toFloat();
+
+    return QVector3D(x, y ,z);
 }

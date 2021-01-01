@@ -8,6 +8,12 @@ class JsonReader
 public:
     JsonReader(QString filePath);
     QString accessData(QString dataName);
+    int get_nb_drones(){
+        return nbDrones;
+    }
+
+    QVector3D accessPosition(int id_drone, int id_waypoint);
+    QVariantMap get_waypoint_by_id(std::vector<QVariantMap> waypoints, int id);
 private:
 
     QVariantMap load_data();

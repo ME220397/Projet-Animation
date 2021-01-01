@@ -69,7 +69,6 @@ void GLArea::initializeGL()
     }
     program_particule->setUniformValue("texture", 0);
 
-    //DroneFactory
     test->init_shaders();
 }
 
@@ -158,7 +157,7 @@ void GLArea::makeGLObjects()
     textures[1] = new QOpenGLTexture(image_particule);
 
     test->loadMesh();
-    test->add_drone();
+    test->create_drones();
 }
 
 

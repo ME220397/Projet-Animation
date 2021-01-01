@@ -57,8 +57,9 @@ public:
     void loadLines(MyMesh *_mesh);
     void delete_vbos();
     void init_shaders();
-    void add_drone();
+    void add_drone(int id_drone);
     void draw(QMatrix4x4 projection, QMatrix4x4 view);
+    void create_drones();
 private:
 
     std::vector<Drone> drones;
@@ -71,8 +72,9 @@ private:
     QOpenGLShaderProgram *program_line;
     MyMesh mesh;
 
-    JsonReader reader;
+    JsonReader *reader;
     int nb_drones;
+    QVector3D d;
 
 
 };
