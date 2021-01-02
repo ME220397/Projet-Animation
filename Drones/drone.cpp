@@ -31,7 +31,7 @@ void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces)
     program_line->release();
 
     // Display the mesh
-    vbo_mesh.bind();
+    /*vbo_mesh.bind();
     program_mesh->bind();
 
     QMatrix4x4 modelMatrixmesh;
@@ -54,7 +54,7 @@ void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces)
     program_mesh->disableAttributeArray("in_position");
     program_mesh->disableAttributeArray("col");
 
-    program_mesh->release();
+    program_mesh->release();*/
 }
 
 void Drone::init(QOpenGLShaderProgram *programM, QOpenGLShaderProgram *programL, QOpenGLBuffer vboM, QOpenGLBuffer vboL){

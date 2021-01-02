@@ -100,7 +100,7 @@ void GLArea::makeGLObjects()
     for (int i = 0; i < 6; ++i) {
         // coordonnées sommets
         for (int j = 0; j < 3; j++)
-            vertData_sol.append(vertices_sol[i*3+j]);
+            vertData_sol.append(vertices_sol[i*3+j]*30.0f);
         // coordonnées texture
         for (int j = 0; j < 2; j++)
             vertData_sol.append(texCoords_sol[i*2+j]);
@@ -184,7 +184,7 @@ void GLArea::paintGL()
 
     // Matrice de projection
     QMatrix4x4 projectionMatrix;
-    projectionMatrix.perspective(45.0f, windowRatio, 1.0f, 1000.0f);
+    projectionMatrix.perspective(45.0f, windowRatio, 1.0f, 70.0f);
 
     // Matrice de vue (caméra)
     QMatrix4x4 viewMatrix;

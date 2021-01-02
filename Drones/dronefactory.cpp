@@ -214,3 +214,8 @@ void DroneFactory::draw(QMatrix4x4 projection, QMatrix4x4 view){
         d.draw(projection, view, n_edges*2, n_faces*3);
     }
 }
+
+std::vector<QVector3D> DroneFactory::compute_trajectory(int id_drone){
+    std::vector<QVector3D> trajectory;
+    std::vector<QVariantMap> waypoints = ;
+}
