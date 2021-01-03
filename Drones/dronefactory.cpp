@@ -63,6 +63,19 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
 
     QVector3D pos = reader->accessPosition(0, 0);
     d = QVector3D(0,400,0) - pos;
+
+    // On récupère les positions du json translaté et divé par 40 pour chaque dornes
+    for(int i = 0; i<nb_drones; i++){
+        trajectories.push_back(reader->compute_trajectory(i, d));
+    }
+    assert(!trajectories.empty());
+
+    // On récupère le nombre de ligne nécessaire pour affiché les trajectoires
+    n_lines_trajectory = 0;
+    for(std::vector<QVector3D> positions : trajectories){
+        int n = positions.size();
+        n_lines_trajectory += (n-1)*2;
+    }
 }
 
 void DroneFactory::create_drones(){
@@ -97,7 +110,7 @@ void DroneFactory::loadMesh(){
     n_faces = _mesh->n_faces();
     n_edges = _mesh->n_edges();
 
-    // Load faces points in a list
+    // On charge les points des faces d'un drone
     GLfloat vertices[n_faces*3*3];
     GLfloat colors[n_faces*3*3];
     int id = 0;
@@ -137,7 +150,8 @@ void DroneFactory::loadMesh(){
     vbo_mesh.create();
     vbo_mesh.bind();
     vbo_mesh.allocate(vert_data_mesh.constData(), vert_data_mesh.count() * int(sizeof (GLfloat)));
-    // Load edges points in a list
+
+    // On charge les arêtes du drones
 
     GLfloat vert_line[n_edges*2*3];
     GLfloat col_line[n_edges*2*3];
@@ -175,26 +189,71 @@ void DroneFactory::loadMesh(){
     vbo_line.create();
     vbo_line.bind();
     vbo_line.allocate(vert_data_line.constData(), vert_data_line.count() * int(sizeof(GLfloat)));
+
+    //On charge les lignes des trajectoire
+
+    QVector<GLfloat> vert_traject;
+    for(std::vector<QVector3D> positions : trajectories){
+        int n = positions.size();
+        for(int i = 0; i<(n-1) ; i++){
+            QVector3D p = positions.at(i);
+            QVector3D q = positions.at(i);
+
+            vert_traject.push_back((float)p[0]);
+            vert_traject.push_back((float)p[1]);
+            vert_traject.push_back((float)p[2]);
+
+            vert_traject.push_back((float)q[0]);
+            vert_traject.push_back((float)q[1]);
+            vert_traject.push_back((float)q[2]);
+        }
+    }
+    //On charge les couleurs des trajectoires
+    for(std::vector<QVector3D> positions : trajectories){
+        int n = positions.size();
+        for(int i = 0; i<(n-1) ; i++){
+
+            vert_traject.push_back(0.0f);
+            vert_traject.push_back(0.0f);
+            vert_traject.push_back(0.0f);
+
+            vert_traject.push_back(0.0f);
+            vert_traject.push_back(0.0f);
+            vert_traject.push_back(0.0f);
+        }
+    }
+
+    vbo_trajectory.create();
+    vbo_trajectory.bind();
+    vbo_trajectory.allocate(vert_traject.constData(), vert_traject.count() * sizeof(GLfloat));
 }
 
 void DroneFactory::delete_vbos(){
     vbo_line.destroy();
     vbo_mesh.destroy();
+    vbo_trajectory.destroy();
 }
 
 void DroneFactory::init_shaders(){
     program_mesh->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSourceM);
     program_mesh->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSourceM);
     if (! program_mesh->link()) {  // édition de lien des shaders dans le shader program
-        qWarning("Failed to compile and link shader program:");
+        qWarning("Failed to compile and link shader program (Mesh):");
         qWarning() << program_mesh->log();
     }
 
     program_line->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
     program_line->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
     if (! program_line->link()) {  // édition de lien des shaders dans le shader program
-        qWarning("Failed to compile and link shader program:");
+        qWarning("Failed to compile and link shader program (Line):");
         qWarning() << program_line->log();
+    }
+
+    program_trajectory->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
+    program_trajectory->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
+    if(! program_trajectory->link()){
+        qWarning("Failed to compile and link shader program (Trajectory):");
+        qWarning() << program_trajectory->log();
     }
 }
 
@@ -215,7 +274,27 @@ void DroneFactory::draw(QMatrix4x4 projection, QMatrix4x4 view){
     }
 }
 
-std::vector<QVector3D> DroneFactory::compute_trajectory(int id_drone){
-    std::vector<QVector3D> trajectory;
-    std::vector<QVariantMap> waypoints = ;
+void DroneFactory::draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view){
+    vbo_trajectory.bind();
+    program_trajectory->bind();
+    QMatrix4x4 modelLineMatrix;
+    modelLineMatrix.translate(0.0, 0.0, 0.0);
+
+    program_trajectory->setUniformValue("projectionMatrix", projection);
+    program_trajectory->setUniformValue("viewMatrix", view);
+    program_trajectory->setUniformValue("modelMatrix", modelLineMatrix);
+
+    program_trajectory->setUniformValue("size", 1.f);
+    program_trajectory->setAttributeBuffer("in_position", GL_FLOAT ,0, 3,  6*sizeof(GLfloat));
+    program_trajectory->setAttributeBuffer("col", GL_FLOAT, 3*sizeof (GLfloat), 3, 6*sizeof(GLfloat));
+
+    program_trajectory->enableAttributeArray("in_position");
+    program_trajectory->enableAttributeArray("col");
+
+    glDrawArrays(GL_LINES, 0, n_lines_trajectory);
+
+    program_trajectory->disableAttributeArray("in_position");
+    program_trajectory->disableAttributeArray("col");
+
+    program_trajectory->release();
 }

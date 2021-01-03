@@ -216,36 +216,9 @@ void GLArea::paintGL()
     program_sol->disableAttributeArray("in_uv");
     program_sol->release();
 
-
-    // Affichage d'une particule
-    vbo_particule.bind();
-    program_particule->bind(); // active le shader program des particules
-
-    QMatrix4x4 modelMatrixParticule;
-    modelMatrixParticule.translate(10.0f, 1.0f, 4.0f);
-    program_particule->setUniformValue("projectionMatrix", projectionMatrix);
-    program_particule->setUniformValue("viewMatrix", viewMatrix);
-    program_particule->setUniformValue("modelMatrix", modelMatrixParticule);
-    program_particule->setUniformValue("particleSize", 1.0f);
-
-    program_particule->setAttributeBuffer("in_position", GL_FLOAT, 0, 3, 5 * sizeof(GLfloat));
-    program_particule->setAttributeBuffer("in_uv", GL_FLOAT, 3 * sizeof(GLfloat), 2, 5 * sizeof(GLfloat));
-    program_particule->enableAttributeArray("in_position");
-    program_particule->enableAttributeArray("in_uv");
-
-    textures[1]->bind();
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDisable(GL_BLEND);
-    textures[1]->release();
-
-    program_particule->disableAttributeArray("in_position");
-    program_particule->disableAttributeArray("in_uv");
-    program_particule->release();
-
-    // Affichage d'un drone
+    // Affichage des drone
     test->draw(projectionMatrix, viewMatrix);
+    test->draw_trajectories(projectionMatrix, viewMatrix);
 }
 
 

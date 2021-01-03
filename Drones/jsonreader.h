@@ -14,7 +14,7 @@ public:
 
     QVector3D accessPosition(int id_drone, int id_waypoint);
     QVariantMap get_waypoint_by_id(std::vector<QVariantMap> waypoints, int id);
-    std::vector<QVector3D> compute_trajectory(int id_drone);
+    std::vector<QVector3D> compute_trajectory(int id_drone, QVector3D translation);
 private:
 
     QVariantMap load_data();

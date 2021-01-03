@@ -60,23 +60,27 @@ public:
     void add_drone(int id_drone);
     void draw(QMatrix4x4 projection, QMatrix4x4 view);
     void create_drones();
+    void draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view);
 private:
 
     std::vector<Drone> drones;
 
     int n_faces;
     int n_edges;
+    int n_lines_trajectory;
     QOpenGLBuffer vbo_mesh;
     QOpenGLBuffer vbo_line;
-    QOpenGLShaderProgram *program_mesh;
-    QOpenGLShaderProgram *program_line;
+    QOpenGLBuffer vbo_trajectory;
+    QOpenGLShaderProgram *program_mesh; // pour les faces du drone
+    QOpenGLShaderProgram *program_line; // pour les arête des drones
+    QOpenGLShaderProgram *program_trajectory; // pour les lignes de trajectoire
     MyMesh mesh;
 
     JsonReader *reader;
     int nb_drones;
     QVector3D d;
 
-
+    std::vector<std::vector<QVector3D>> trajectories;
 };
 
 #endif // DRONEFACTORY_H
