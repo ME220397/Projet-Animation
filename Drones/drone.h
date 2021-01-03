@@ -18,9 +18,13 @@ class Drone
         QVector3D get_position(){
             return position;
         }
+        QVector3D get_vitesse(){
+            return vitesse;
+        }
     private:
         QVector3D position;
         float size;
+        QVector3D vitesse;
 
         QOpenGLShaderProgram *program_mesh;
         QOpenGLShaderProgram *program_line;
