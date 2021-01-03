@@ -275,9 +275,6 @@ void DroneFactory::draw(QMatrix4x4 projection, QMatrix4x4 view){
     }
 }
 
-<<<<<<< HEAD
-
-=======
 void DroneFactory::draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view){
     vbo_trajectory.bind();
     program_trajectory->bind();
@@ -302,4 +299,3 @@ void DroneFactory::draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view){
 
     program_trajectory->release();
 }
->>>>>>> d40da10bdeb24f26255415be1c85cc7af1c84854
