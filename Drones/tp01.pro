@@ -32,6 +32,7 @@ macx: {
 SOURCES += main.cpp\
         drone.cpp \
         dronefactory.cpp \
+        helper.cpp \
         jsonreader.cpp \
         princ.cpp \
         glarea.cpp
@@ -40,6 +41,7 @@ HEADERS  += princ.h \
         drone.h \
         dronefactory.h \
         glarea.h \
+        helper.h \
         jsonreader.h
 
 FORMS    += princ.ui
