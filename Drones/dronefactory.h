@@ -48,6 +48,8 @@ struct MyTraits : public OpenMesh::DefaultTraits
     EdgeTraits{float thickness;};
 };
 typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
+
+
 class DroneFactory
 {
 public:
