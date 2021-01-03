@@ -15,7 +15,7 @@ public:
     float distance(MyMesh::Point p1, MyMesh::Point p2);
     float diametre(MyMesh *_mesh);
     bool collision(Drone d1, Drone d2, float diametre);
-    void controle_vitesse();
+    bool controle_vitesse(Drone drone, float vitesse_max);
 };
 
 #endif // HELPER_H

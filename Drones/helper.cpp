@@ -48,13 +48,17 @@ bool Helper::collision(Drone d1, Drone d2, float diametre){
     MyMesh::Point p1(D1[0], D1[1], D1[2]);
     MyMesh::Point p2(D2[0], D2[1], D2[2]);
     if(distance(p1, p2) < diametre){
-        return True;
+        return true;
     }
-    return False;
+    return false;
 }
 
-void Helper::controle_vitesse(){
-
+bool Helper::controle_vitesse(Drone drone, float vitesse_max){//true -> trop rapide / false -> aucun soucis
+    QVector3D vitesse = drone.get_vitesse();
+    if(vitesse[0] > vitesse_max || vitesse[1] > vitesse_max || vitesse[2] > vitesse_max){
+        return true;//Trop rapide
+    }
+    return false;
 }
 
 
