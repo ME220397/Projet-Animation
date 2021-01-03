@@ -5,10 +5,12 @@ Helper::Helper()
 
 }
 
+
 float Helper::distance(MyMesh::Point p1, MyMesh::Point p2){
     return sqrt(pow((p1[0] - p2[0]),2) + pow(p1[1] - p2[1], 2) + pow(p1[2] - p2[2], 2));
 }
-float Helper::rayon(MyMesh *_mesh){
+
+float Helper::diametre(MyMesh *_mesh){
     MyMesh::Point  max_coord = MyMesh::Point(0, 0, 0);
     MyMesh::Point  min_coord = MyMesh::Point(100000000, 10000000, 10000000);
     for(MyMesh::VertexIter v_it = _mesh->vertices_begin(); v_it != _mesh->vertices_end(); ++v_it)
@@ -34,16 +36,23 @@ float Helper::rayon(MyMesh *_mesh){
             min_coord[2] = p[2];
         }
     }
-    float max_dist = sqrt(pow((min_coord[0] - max_coord[0]),2));
-    if(max_dist < sqrt(pow((min_coord[1] - max_coord[1]),2)))
-        max_dist = sqrt(pow((min_coord[1] - max_coord[1]),2));
-    if(max_dist < sqrt(pow((min_coord[2] - max_coord[2]),2)))
-        max_dist = sqrt(pow((min_coord[2] - max_coord[2]),2));
-    return max_dist; //Peut etre utiliser la fonction distance
+    float max_dist = distance(min_coord, max_coord);
+    return max_dist; //Renvoie le rayon *2(le diametre
 }
-void Helper::collision(){
 
+bool Helper::collision(Drone d1, Drone d2, float diametre){
+    QVector3D D1;
+    QVector3D D2;
+    D1 = d1.get_position();
+    D2 = d2.get_position();
+    MyMesh::Point p1(D1[0], D1[1], D1[2]);
+    MyMesh::Point p2(D2[0], D2[1], D2[2]);
+    if(distance(p1, p2) < diametre){
+        return True;
+    }
+    return False;
 }
+
 void Helper::controle_vitesse(){
 
 }
