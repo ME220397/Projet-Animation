@@ -48,6 +48,7 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
 {
     program_mesh = new QOpenGLShaderProgram(parent);
     program_line = new QOpenGLShaderProgram(parent);
+    program_trajectory = new QOpenGLShaderProgram(parent);
     // fenêtre de sélection des fichiers
     QString fileName = "./obj/drone.obj";
 

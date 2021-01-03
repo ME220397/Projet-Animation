@@ -25,6 +25,7 @@ public:
 
 protected slots:
     void onTimeout();
+    void on_push_trajectory();
 
 protected:
     void initializeGL() override;
@@ -56,6 +57,8 @@ private:
     void tearGLObjects();
 
     DroneFactory * test;
+
+    bool show_traject = true;
 };
 
 #endif // GLAREA_H

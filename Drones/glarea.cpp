@@ -184,7 +184,7 @@ void GLArea::paintGL()
 
     // Matrice de projection
     QMatrix4x4 projectionMatrix;
-    projectionMatrix.perspective(45.0f, windowRatio, 1.0f, 70.0f);
+    projectionMatrix.perspective(45.0f, windowRatio, 1.0f, 500.0f);
 
     // Matrice de vue (caméra)
     QMatrix4x4 viewMatrix;
@@ -218,7 +218,8 @@ void GLArea::paintGL()
 
     // Affichage des drone
     test->draw(projectionMatrix, viewMatrix);
-    test->draw_trajectories(projectionMatrix, viewMatrix);
+    if(show_traject)
+        test->draw_trajectories(projectionMatrix, viewMatrix);
 }
 
 
@@ -311,4 +312,13 @@ void GLArea::onTimeout()
 
 
     update();
+}
+
+
+void GLArea::on_push_trajectory(){
+    if(show_traject){
+        show_traject = false;
+    }
+    else
+        show_traject = true;
 }

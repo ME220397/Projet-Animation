@@ -7,4 +7,5 @@
 Princ::Princ(QWidget *parent) : QMainWindow(parent)
 {
     setupUi(this);
+    connect(pushButton, SIGNAL(clicked()), glarea, SLOT(on_push_trajectory()));
 }

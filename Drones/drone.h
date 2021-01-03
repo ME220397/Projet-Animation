@@ -15,6 +15,9 @@ class Drone
         Drone(QVector3D position, float size);
         void draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces);
         void init(QOpenGLShaderProgram *programM, QOpenGLShaderProgram *programL, QOpenGLBuffer vboM, QOpenGLBuffer vboL);
+        QVector3D get_position(){
+            return position;
+        }
     private:
         QVector3D position;
         float size;
