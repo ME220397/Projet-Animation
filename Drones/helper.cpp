@@ -48,9 +48,9 @@ bool Helper::collision(Drone d1, Drone d2, float diametre){
     MyMesh::Point p1(D1[0], D1[1], D1[2]);
     MyMesh::Point p2(D2[0], D2[1], D2[2]);
     if(distance(p1, p2) < diametre){
-        return True;
+        return true;
     }
-    return False;
+    return false;
 }
 
 void Helper::controle_vitesse(){
