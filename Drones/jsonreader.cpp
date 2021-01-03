@@ -100,14 +100,16 @@ QVector3D JsonReader::accessPosition(int id_drone, int id_waypoint){
     return QVector3D(x, y ,z);
 }
 
-vector<QVector3D> JsonReader::compute_trajectory(int id_drone){
+vector<QVector3D> JsonReader::compute_trajectory(int id_drone, QVector3D translate){
     int id = (nbDrones-1) - id_drone;
     vector<QVariantMap> waypoints = drones[id];
 
     vector<QVector3D> trajectory;
 
     for(int i = 0; i<(int)waypoints.size(); i++){
-        trajectory.push_back(accessPosition(id_drone, i));
+        QVector3D position = accessPosition(id_drone, i);
+        position += translate;
+        trajectory.push_back(position/40);
     }
 
     return trajectory;
