@@ -59,20 +59,23 @@ void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces,
 
     program_mesh->release();
 
-    // Afficher les allant du drone vers le sol
+    // Afficher les axes allant du drone vers le sol
     if(show_axis){
         vbo_axes.bind();
         program_axe->bind();
         QMatrix4x4 modelAxeMatrix;
+        float y;
         QVector3D position_transi = position;
-        position_transi[1] = 0.0;
+        y = position[1]/10.0f;
+        position_transi[1]=0.0f;
+
         modelAxeMatrix.translate(position_transi);
 
         program_axe->setUniformValue("projectionMatrix", projection);
         program_axe->setUniformValue("viewMatrix", view);
         program_axe->setUniformValue("modelMatrix", modelAxeMatrix);
 
-        program_axe->setUniformValue("size", 1.0f);
+        program_axe->setUniformValue("size", y);
         program_axe->setAttributeBuffer("in_position", GL_FLOAT ,0, 3,  6*sizeof(GLfloat));
         program_axe->setAttributeBuffer("col", GL_FLOAT, 3*sizeof (GLfloat), 3, 6*sizeof(GLfloat));
 

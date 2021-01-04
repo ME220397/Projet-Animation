@@ -50,6 +50,7 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
     program_line = new QOpenGLShaderProgram(parent);
     program_trajectory = new QOpenGLShaderProgram(parent);
     program_axe = new QOpenGLShaderProgram(parent);
+    helper = new Helper;
     // fenêtre de sélection des fichiers
     QString fileName = "./obj/drone.obj";
 
@@ -278,7 +279,7 @@ void DroneFactory::loadMesh(){
 
     float x, y, z;//position du point d'intersection entre le plan et la droite partant du drone
     x = position[0];
-    y = 0.0;
+    y = 0.0f;
     z = position[2];
 
     /*GLfloat vert_axes[6] ={
@@ -286,9 +287,9 @@ void DroneFactory::loadMesh(){
         x, y, z
     };*/
     QVector<GLfloat> vert_data_axes;
-    vert_data_axes.append(a); vert_data_axes.append(b); vert_data_axes.append(c);
-    vert_data_axes.append(1.0); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur a,b,c
     vert_data_axes.append(x); vert_data_axes.append(y); vert_data_axes.append(z);
+    vert_data_axes.append(1.0); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur a,b,c
+    vert_data_axes.append(a); vert_data_axes.append(b); vert_data_axes.append(c);
     vert_data_axes.append(1.0f); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur x,y,z
 
     vbo_axes.create();
@@ -396,6 +397,17 @@ void DroneFactory::animate(float dt){
             //qDebug() << "Vitesse = " <<  vitesse[0] << " " << vitesse[1] << " " << vitesse[2];
             drones[i].set_vitesse(vitesse);
             drones[i].animate(dt, (i+1), (float)reader->get_framerate());
+        }
+    }
+    for(int i=0; i<nb_drones; i++)
+    {
+        for(int j = i; j<nb_drones ; j++){
+            if(j != i && helper->collision(drones[i], drones[j], helper->diametre(&mesh)) == true)
+                qDebug() << "les drones " << i << "et" << j << "entrent en collision à la frame" << current_frame;
+        }
+        if(helper->controle_vitesse(drones[i], 50.0))
+        {
+            qDebug() << "le drone" << i << "est trop rapide à la frame" << current_frame;
         }
     }
 }

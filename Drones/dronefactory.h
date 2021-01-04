@@ -10,6 +10,7 @@
 #include <QOpenGLFunctions>
 #include <jsonreader.h>
 #include <drone.h>
+#include <helper.h>
 
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
@@ -29,12 +30,12 @@
     #include <GL/glext.h>
     #include <GL/glut.h>
 #endif
-
+//using namespace Helper;
 using namespace std;
 using namespace OpenMesh;
 using namespace OpenMesh::Attributes;
 
-struct MyTraits : public OpenMesh::DefaultTraits
+/*struct MyTraits : public OpenMesh::DefaultTraits
 {
     // use vertex normals and vertex colors
     VertexAttributes( OpenMesh::Attributes::Normal | OpenMesh::Attributes::Color );
@@ -48,7 +49,7 @@ struct MyTraits : public OpenMesh::DefaultTraits
     // edge thickness
     EdgeTraits{float thickness;};
 };
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
+typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;*/
 
 
 class DroneFactory
@@ -97,6 +98,7 @@ private:
     vector<vector<QVector3D>> vitesses;
 
     int current_frame;
+    Helper * helper;
 };
 
 #endif // DRONEFACTORY_H
