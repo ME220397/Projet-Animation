@@ -278,7 +278,7 @@ void DroneFactory::loadMesh(){
 
     float x, y, z;//position du point d'intersection entre le plan et la droite partant du drone
     x = position[0];
-    y = 0.0;
+    y = 0.0f;
     z = position[2];
 
     /*GLfloat vert_axes[6] ={
@@ -286,9 +286,9 @@ void DroneFactory::loadMesh(){
         x, y, z
     };*/
     QVector<GLfloat> vert_data_axes;
-    vert_data_axes.append(a); vert_data_axes.append(b); vert_data_axes.append(c);
-    vert_data_axes.append(1.0); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur a,b,c
     vert_data_axes.append(x); vert_data_axes.append(y); vert_data_axes.append(z);
+    vert_data_axes.append(1.0); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur a,b,c
+    vert_data_axes.append(a); vert_data_axes.append(b); vert_data_axes.append(c);
     vert_data_axes.append(1.0f); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur x,y,z
 
     vbo_axes.create();
