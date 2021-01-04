@@ -1,9 +1,10 @@
 #include "drone.h"
 
-Drone::Drone(QVector3D position, float size)
+Drone::Drone(QVector3D position, float size, float temps_restant)
 {
     this->position = position;
     this->size = size;
+    this->temps_restant = temps_restant;
 }
 
 void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces, bool show_axis){

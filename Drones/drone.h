@@ -12,7 +12,7 @@ class Drone
 {
 
     public:
-        Drone(QVector3D position, float size);
+        Drone(QVector3D position, float size, float temps_restant);
         void draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces, bool show_axis);
         void init(QOpenGLShaderProgram *programM, QOpenGLShaderProgram *programL, QOpenGLBuffer vboM, QOpenGLBuffer vboL);
         void init_axes(QOpenGLShaderProgram *programM, QOpenGLBuffer vboM);
@@ -22,10 +22,13 @@ class Drone
         QVector3D get_vitesse(){
             return vitesse;
         }
+        void set_vitesse(QVector3D vitesse);
+        void animate(float dt);
     private:
         QVector3D position;
         float size;
         QVector3D vitesse;
+        float temps_restant;
 
         QOpenGLShaderProgram *program_mesh;
         QOpenGLShaderProgram *program_line;
@@ -33,6 +36,7 @@ class Drone
         QOpenGLBuffer vbo_mesh;
         QOpenGLBuffer vbo_line;
         QOpenGLBuffer vbo_axes;
+
 };
 
 #endif // DRONE_H

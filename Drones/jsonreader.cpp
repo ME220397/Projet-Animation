@@ -17,6 +17,9 @@ JsonReader::JsonReader(QString filePath)
     description = jsonMap["description"].toString();
     qDebug() << description;
 
+    // Récupération du frameRate
+    framerate = jsonMap["framerate"].toInt();
+
    //Get the list of item for "drones"
     QList<QVariant> list = jsonMap["drones"].toList();
     nbDrones = list.length();
@@ -113,4 +116,31 @@ vector<QVector3D> JsonReader::compute_trajectory(int id_drone, QVector3D transla
     }
 
     return trajectory;
+}
+
+int JsonReader::accesFrame(int id_drone, int id_waypoint){
+    // Nous voulons acceder aux drones dans l'ordre croissant et non pas
+    // en commançant pas 20 comme dans le json
+    int id = (nbDrones-1) - id_drone;
+    // On récupère le waypoint associé au drone
+    QVariantMap waypoint = get_waypoint_by_id(drones[id], id_waypoint);
+
+    // On recupere le frame associé au waypoint
+    int frame = waypoint["frame"].toInt();
+
+    return frame;
+}
+
+int JsonReader::get_nb_waypoints(int id_drone){
+    // Nous voulons acceder aux drones dans l'ordre croissant et non pas
+    // en commançant pas 20 comme dans le json
+    int id = (nbDrones-1) - id_drone;
+    // On récupère le nombre de waypoints pour le drone id
+    int n = drones[id].size();
+
+    return n;
+}
+
+int JsonReader::get_framerate(){
+    return framerate;
 }

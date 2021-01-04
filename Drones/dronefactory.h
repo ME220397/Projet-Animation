@@ -30,6 +30,7 @@
     #include <GL/glut.h>
 #endif
 
+using namespace std;
 using namespace OpenMesh;
 using namespace OpenMesh::Attributes;
 
@@ -65,7 +66,9 @@ public:
     void draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view);
 private:
 
-    std::vector<Drone> drones;
+    vector<Drone> drones;
+    vector<vector<float>> temps_par_drone;
+    vector<float> temps_max_drone;
 
     int n_faces;
     int n_edges;

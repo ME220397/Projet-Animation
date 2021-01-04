@@ -13,8 +13,11 @@ public:
     }
 
     QVector3D accessPosition(int id_drone, int id_waypoint);
+    int accesFrame(int id_drone, int id_waypoint);
+    int get_nb_waypoints(int id_drone);
     QVariantMap get_waypoint_by_id(std::vector<QVariantMap> waypoints, int id);
     std::vector<QVector3D> compute_trajectory(int id_drone, QVector3D translation);
+    int get_framerate();
 private:
 
     QVariantMap load_data();
@@ -25,6 +28,7 @@ private:
     QString description;
     std::vector<std::vector<QVariantMap>> drones;
     int nbDrones;
+    int framerate;
 };
 
 #endif // JSONREADER_H

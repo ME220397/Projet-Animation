@@ -78,6 +78,26 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
         int n = positions.size();
         n_lines_trajectory += (n-1)*2;
     }
+
+    // Récuperation du framerate
+    int framerate = reader->get_framerate();
+    // On recupère les temps pour chaque drone
+    for(int i=0; i<nb_drones; i++){
+        int n_waypoints = reader->get_nb_waypoints(i);
+        vector<float> vec_temps;
+        float temps_max = 0.0f;
+        for(int j=0; j<n_waypoints; j++){
+            int frame = reader->accesFrame(i, j);
+            float temps = float(frame)/(float)framerate;
+            if(temps_max < temps)
+                temps_max = temps;
+            vec_temps.push_back(temps);
+        }
+        temps_max_drone.push_back(temps_max);
+        temps_par_drone.push_back(vec_temps);
+    }
+
+    assert(!temps_par_drone.empty());
 }
 
 void DroneFactory::create_drones(){
@@ -305,7 +325,7 @@ void DroneFactory::init_shaders(){
 void DroneFactory::add_drone(int id_drone){
     QVector3D position_start = reader->accessPosition(id_drone, 0);
     position_start +=d;
-    Drone d(position_start/40, 2.);
+    Drone d(position_start/40, 2., temps_max_drone.at(id_drone));
     d.init(program_mesh, program_line, vbo_mesh, vbo_line);
     d.init_axes(program_axe, vbo_axes);
     drones.push_back(d);
