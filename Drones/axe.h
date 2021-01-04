@@ -13,6 +13,9 @@ public:
     void load_repere();
     void draw_repere(QMatrix4x4 projection, QMatrix4x4 view);
     void init_shaders();
+    void destroy_vbo(){
+        vbo_repere.destroy();
+    }
 private:
     QOpenGLBuffer vbo_repere;
     QOpenGLShaderProgram *program_repere; // Pour le repere

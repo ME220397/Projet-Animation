@@ -28,6 +28,8 @@ protected slots:
     void onTimeout();
     void on_push_trajectory();
     void on_push_axis();
+    void on_push_repere();
+    void on_push_sol();
 
 protected:
     void initializeGL() override;
@@ -63,6 +65,8 @@ private:
 
     bool show_traject = true;
     bool show_axis = true;
+    bool show_rep = true;
+    bool show_sol = true;
 };
 
 #endif // GLAREA_H

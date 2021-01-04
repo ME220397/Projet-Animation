@@ -10,7 +10,7 @@ static const char *vertexShaderSource =
     "uniform float size;                    \n"
     "void main() {                          \n"
     "   color = col;                        \n"
-    "   vec4 pos = vec4(vec3(in_position.x, in_position.y, in_position.z)*size , 1.0);                   \n"
+    "   vec4 pos = vec4(vec3(in_position)*size , 1.0);                   \n"
     "   gl_Position = projectionMatrix * viewMatrix * modelMatrix * pos;          \n"
     "}                                      \n";
 
@@ -26,30 +26,49 @@ Axe::Axe(QOpenGLWidget * parent)
 {
     program_repere = new QOpenGLShaderProgram(parent);
 }
+
 void Axe::load_repere(){
-    QVector<GLfloat> vert_data_repere;
-    vert_data_repere.push_back(-0.5f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f); // axe X
-    vert_data_repere.push_back(0.5f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f);
+    GLfloat vertices[] = {
+        // axe des x
+        0.5, 0.0, 0.0,
+        -0.5, 0.0, 0.0,
 
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(-0.5f); vert_data_repere.push_back(0.0f); // axe Y
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.5f); vert_data_repere.push_back(0.0f);
+        // axe des y
+        0.0, 0.5, 0.0,
+        0.0, -0.5, 0.0,
 
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(-0.5f); // axe Z
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.5f);
+        //axe des z
+        0.0, 0.0, 0.5,
+        0.0, 0.0, -0.5
+    };
 
+    GLfloat color[] = {
+        // couleur axe des x
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
 
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(1.0f); // Couleur axe X en bleu
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(1.0f);
+        //couleur axe des y
+        1.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
 
-    vert_data_repere.push_back(1.0f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f); // Couleur axe Y en rouge
-    vert_data_repere.push_back(1.0f); vert_data_repere.push_back(0.0f); vert_data_repere.push_back(0.0f);
+        //couleur axe des z
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.0
+    };
 
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(1.0f); vert_data_repere.push_back(0.0f); // Couleur axe Z en vert
-    vert_data_repere.push_back(0.0f); vert_data_repere.push_back(1.0f); vert_data_repere.push_back(0.0f);
+    QVector<GLfloat> vert_data;
+    for(int i=0; i<6; i++){
+        // sommets des axes
+        for(int j=0; j<3 ; j++)
+            vert_data.append(vertices[i*3+j]);
+        // Couleurs de axes
+        for(int j=0; j<3 ; j++)
+            vert_data.append(color[i*3+j]);
+    }
 
     vbo_repere.create();
     vbo_repere.bind();
-    vbo_repere.allocate(vert_data_repere.constData(), vert_data_repere.count()*sizeof (GLfloat));
+    vbo_repere.allocate(vert_data.constData(), vert_data.count()*sizeof(GLfloat));
 
 }
 
@@ -58,14 +77,14 @@ void Axe::draw_repere(QMatrix4x4 projection, QMatrix4x4 view){
     vbo_repere.bind();
     program_repere->bind();
     QMatrix4x4 modelRepereMatrix;
-    QVector3D position(0.0,0.0,0.0);
-    modelRepereMatrix.translate(position);
+    modelRepereMatrix.translate(0.f, 0.f, 0.f);
 
     program_repere->setUniformValue("projectionMatrix", projection);
     program_repere->setUniformValue("viewMatrix", view);
     program_repere->setUniformValue("modelMatrix", modelRepereMatrix);
 
-    program_repere->setUniformValue("size", 1.0f);
+    program_repere->setUniformValue("size", 150.f);
+
     program_repere->setAttributeBuffer("in_position", GL_FLOAT ,0, 3,  6*sizeof(GLfloat));
     program_repere->setAttributeBuffer("col", GL_FLOAT, 3*sizeof (GLfloat), 3, 6*sizeof(GLfloat));
 

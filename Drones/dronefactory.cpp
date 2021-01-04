@@ -199,31 +199,39 @@ void DroneFactory::loadMesh(){
         int n = positions.size();
         for(int i = 0; i<(n-1) ; i++){
             QVector3D p = positions.at(i);
-            QVector3D q = positions.at(i);
+            QVector3D q = positions.at(i+1);
 
-            vert_traject.push_back((float)p[0]);
-            vert_traject.push_back((float)p[1]);
-            vert_traject.push_back((float)p[2]);
+            vert_traject.append((float)p[0]);
+            vert_traject.append((float)p[1]);
+            vert_traject.append((float)p[2]);
 
-            vert_traject.push_back((float)q[0]);
-            vert_traject.push_back((float)q[1]);
-            vert_traject.push_back((float)q[2]);
+            vert_traject.append(0.0f);
+            vert_traject.append(1.0f);
+            vert_traject.append(0.0f);
+
+            vert_traject.append((float)q[0]);
+            vert_traject.append((float)q[1]);
+            vert_traject.append((float)q[2]);
+
+            vert_traject.append(0.0f);
+            vert_traject.append(1.0f);
+            vert_traject.append(0.0f);
         }
     }
     //On charge les couleurs des trajectoires
-    for(std::vector<QVector3D> positions : trajectories){
+    /*for(std::vector<QVector3D> positions : trajectories){
         int n = positions.size();
         for(int i = 0; i<(n-1) ; i++){
 
-            vert_traject.push_back(0.0f);
-            vert_traject.push_back(0.0f);
-            vert_traject.push_back(0.0f);
+            vert_traject.append(0.0f);
+            vert_traject.append(0.0f);
+            vert_traject.append(0.0f);
 
-            vert_traject.push_back(0.0f);
-            vert_traject.push_back(0.0f);
-            vert_traject.push_back(0.0f);
+            vert_traject.append(0.0f);
+            vert_traject.append(0.0f);
+            vert_traject.append(0.0f);
         }
-    }
+    }*/
 
     vbo_trajectory.create();
     vbo_trajectory.bind();
@@ -248,10 +256,10 @@ void DroneFactory::loadMesh(){
         x, y, z
     };*/
     QVector<GLfloat> vert_data_axes;
-    vert_data_axes.push_back(a); vert_data_axes.push_back(b); vert_data_axes.push_back(c);
-    vert_data_axes.push_back(x); vert_data_axes.push_back(y); vert_data_axes.push_back(z);
-    vert_data_axes.push_back(1.0f); vert_data_axes.push_back(0.0f); vert_data_axes.push_back(0.0f); //couleur a,b,c
-    vert_data_axes.push_back(1.0f); vert_data_axes.push_back(0.0f); vert_data_axes.push_back(0.0f); //couleur x,y,z
+    vert_data_axes.append(a); vert_data_axes.append(b); vert_data_axes.append(c);
+    vert_data_axes.append(1.0); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur a,b,c
+    vert_data_axes.append(x); vert_data_axes.append(y); vert_data_axes.append(z);
+    vert_data_axes.append(1.0f); vert_data_axes.append(1.0f); vert_data_axes.append(0.0f); //couleur x,y,z
 
     vbo_axes.create();
     vbo_axes.bind();

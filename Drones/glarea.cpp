@@ -70,8 +70,9 @@ void GLArea::initializeGL()
     }
     program_particule->setUniformValue("texture", 0);
 
-    test->init_shaders();
     repere->init_shaders();
+    test->init_shaders();
+
 }
 
 
@@ -158,9 +159,10 @@ void GLArea::makeGLObjects()
         qDebug() << "load image puff.png failed";
     textures[1] = new QOpenGLTexture(image_particule);
 
+    repere->load_repere();
+
     test->loadMesh();
     test->create_drones();
-    repere->load_repere();
 }
 
 
@@ -169,6 +171,7 @@ void GLArea::tearGLObjects()
     vbo_sol.destroy();
     vbo_particule.destroy();
     test->delete_vbos();
+    repere->destroy_vbo();
     for (int i = 0; i < 2; i++)
         delete textures[i];
 }
@@ -197,35 +200,39 @@ void GLArea::paintGL()
     viewMatrix.rotate(zRot, 0, 0, 1);
 
     // Affichage du sol
-    /*vbo_sol.bind();
-    program_sol->bind(); // active le shader program du sol
+    if(show_sol){
+        vbo_sol.bind();
+        program_sol->bind(); // active le shader program du sol
 
-    QMatrix4x4 modelMatrixSol;
-    modelMatrixSol.translate(0.0f, 0.0f, 0.0f);
-    program_sol->setUniformValue("projectionMatrix", projectionMatrix);
-    program_sol->setUniformValue("viewMatrix", viewMatrix);
-    program_sol->setUniformValue("modelMatrix", modelMatrixSol);
+        QMatrix4x4 modelMatrixSol;
+        modelMatrixSol.translate(0.0f, 0.0f, 0.0f);
+        program_sol->setUniformValue("projectionMatrix", projectionMatrix);
+        program_sol->setUniformValue("viewMatrix", viewMatrix);
+        program_sol->setUniformValue("modelMatrix", modelMatrixSol);
 
-    program_sol->setAttributeBuffer("in_position", GL_FLOAT, 0, 3, 5 * sizeof(GLfloat));
-    program_sol->setAttributeBuffer("in_uv", GL_FLOAT, 3 * sizeof(GLfloat), 2, 5 * sizeof(GLfloat));
-    program_sol->enableAttributeArray("in_position");
-    program_sol->enableAttributeArray("in_uv");
+        program_sol->setAttributeBuffer("in_position", GL_FLOAT, 0, 3, 5 * sizeof(GLfloat));
+        program_sol->setAttributeBuffer("in_uv", GL_FLOAT, 3 * sizeof(GLfloat), 2, 5 * sizeof(GLfloat));
+        program_sol->enableAttributeArray("in_position");
+        program_sol->enableAttributeArray("in_uv");
 
-    textures[0]->bind();
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    textures[0]->release();
+        textures[0]->bind();
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        textures[0]->release();
 
-    program_sol->disableAttributeArray("in_position");
-    program_sol->disableAttributeArray("in_uv");
-    program_sol->release();*/
+        program_sol->disableAttributeArray("in_position");
+        program_sol->disableAttributeArray("in_uv");
+        program_sol->release();
+    }
+
+    // Affichage du repere
+    if(show_rep)
+        repere->draw_repere(projectionMatrix, viewMatrix);
 
     // Affichage des drone
     test->draw(projectionMatrix, viewMatrix, show_axis);
     if(show_traject)
         test->draw_trajectories(projectionMatrix, viewMatrix);
 
-    // Affichage du repere
-    repere->draw_repere(projectionMatrix, viewMatrix);
 }
 
 
@@ -333,4 +340,16 @@ void GLArea::on_push_axis(){
     if(show_axis)
         show_axis = false;
     else show_axis = true;
+}
+
+void GLArea::on_push_repere(){
+    if(show_rep)
+        show_rep = false;
+    else show_rep = true;
+}
+
+void GLArea::on_push_sol(){
+    if(show_sol)
+        show_sol = false;
+    else show_sol = true;
 }
