@@ -49,6 +49,7 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
     program_mesh = new QOpenGLShaderProgram(parent);
     program_line = new QOpenGLShaderProgram(parent);
     program_trajectory = new QOpenGLShaderProgram(parent);
+    program_axe = new QOpenGLShaderProgram(parent);
     // fenêtre de sélection des fichiers
     QString fileName = "./obj/drone.obj";
 
@@ -227,6 +228,34 @@ void DroneFactory::loadMesh(){
     vbo_trajectory.create();
     vbo_trajectory.bind();
     vbo_trajectory.allocate(vert_traject.constData(), vert_traject.count() * sizeof(GLfloat));
+
+    //Chargement des axes
+    QVector3D position = reader->accessPosition(0,0);
+    position+=d;
+    position/=40;
+    float a, b, c;//position du drone
+    a = position[0];
+    b = position[1];
+    c = position[2];
+
+    float x, y, z;//position du point d'intersection entre le plan et la droite partant du drone
+    x = position[0];
+    y = 0.0;
+    z = position[2];
+
+    /*GLfloat vert_axes[6] ={
+        a, b, c,
+        x, y, z
+    };*/
+    QVector<GLfloat> vert_data_axes;
+    vert_data_axes.push_back(a); vert_data_axes.push_back(b); vert_data_axes.push_back(c);
+    vert_data_axes.push_back(x); vert_data_axes.push_back(y); vert_data_axes.push_back(z);
+    vert_data_axes.push_back(1.0f); vert_data_axes.push_back(0.0f); vert_data_axes.push_back(0.0f); //couleur a,b,c
+    vert_data_axes.push_back(1.0f); vert_data_axes.push_back(0.0f); vert_data_axes.push_back(0.0f); //couleur x,y,z
+
+    vbo_axes.create();
+    vbo_axes.bind();
+    vbo_axes.allocate(vert_data_axes.constData(), vert_data_axes.count()*sizeof (GLfloat));
 }
 
 void DroneFactory::delete_vbos(){
@@ -256,6 +285,13 @@ void DroneFactory::init_shaders(){
         qWarning("Failed to compile and link shader program (Trajectory):");
         qWarning() << program_trajectory->log();
     }
+
+    program_axe->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
+    program_axe->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
+    if (! program_axe->link()) {  // édition de lien des shaders dans le shader program
+        qWarning("Failed to compile and link shader program (Axe):");
+        qWarning() << program_axe->log();
+    }
 }
 
 void DroneFactory::add_drone(int id_drone){
@@ -263,6 +299,7 @@ void DroneFactory::add_drone(int id_drone){
     position_start +=d;
     Drone d(position_start/40, 2.);
     d.init(program_mesh, program_line, vbo_mesh, vbo_line);
+    d.init_axes(program_axe, vbo_axes);
     drones.push_back(d);
 }
 

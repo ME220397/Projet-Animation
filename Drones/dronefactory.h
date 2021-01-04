@@ -56,7 +56,7 @@ public:
     DroneFactory(QOpenGLWidget * parent);
     void resetAllColorsAndThickness(MyMesh* _mesh);
     void loadMesh();
-    void loadLines(MyMesh *_mesh);
+    void loadLines(MyMesh *_mesh); // je sers a rien
     void delete_vbos();
     void init_shaders();
     void add_drone(int id_drone);
@@ -73,9 +73,11 @@ private:
     QOpenGLBuffer vbo_mesh;
     QOpenGLBuffer vbo_line;
     QOpenGLBuffer vbo_trajectory;
+    QOpenGLBuffer vbo_axes;
     QOpenGLShaderProgram *program_mesh; // pour les faces du drone
     QOpenGLShaderProgram *program_line; // pour les arête des drones
     QOpenGLShaderProgram *program_trajectory; // pour les lignes de trajectoire
+    QOpenGLShaderProgram *program_axe; // pour les axes
     MyMesh mesh;
 
     JsonReader *reader;
