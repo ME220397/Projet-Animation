@@ -50,6 +50,7 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
     program_line = new QOpenGLShaderProgram(parent);
     program_trajectory = new QOpenGLShaderProgram(parent);
     program_axe = new QOpenGLShaderProgram(parent);
+    helper = new Helper;
     // fenêtre de sélection des fichiers
     QString fileName = "./obj/drone.obj";
 
@@ -396,6 +397,17 @@ void DroneFactory::animate(float dt){
             //qDebug() << "Vitesse = " <<  vitesse[0] << " " << vitesse[1] << " " << vitesse[2];
             drones[i].set_vitesse(vitesse);
             drones[i].animate(dt, (i+1), (float)reader->get_framerate());
+        }
+    }
+    for(int i=0; i<nb_drones; i++)
+    {
+        for(int j = i; j<nb_drones ; j++){
+            if(j != i && helper->collision(drones[i], drones[j], helper->diametre(&mesh)) == true)
+                qDebug() << "les drones " << i << "et" << j << "entrent en collision à la frame" << current_frame;
+        }
+        if(helper->controle_vitesse(drones[i], 50.0))
+        {
+            qDebug() << "le drone" << i << "est trop rapide à la frame" << current_frame;
         }
     }
 }
