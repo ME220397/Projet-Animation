@@ -6,7 +6,8 @@ Drone::Drone(QVector3D position, float size)
     this->size = size;
 }
 
-void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces){
+void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces, bool show_axis){
+    // Affiche les arêtes du drone
     vbo_line.bind();
     program_line->bind();
     QMatrix4x4 modelLineMatrix;
@@ -30,7 +31,7 @@ void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces)
 
     program_line->release();
 
-    // Display the mesh
+    // Affiche les faces du drone
     vbo_mesh.bind();
     program_mesh->bind();
 
@@ -56,34 +57,33 @@ void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces)
 
     program_mesh->release();
 
+    // Afficher les allant du drone vers le sol
+    if(show_axis){
+        vbo_axes.bind();
+        program_axe->bind();
+        QMatrix4x4 modelAxeMatrix;
+        QVector3D position_transi = position;
+        position_transi[1] = 0.0;
+        modelAxeMatrix.translate(position_transi);
 
-    vbo_axes.bind();
-    program_axe->bind();
-    QMatrix4x4 modelAxeMatrix;
-    QVector3D position_transi = position;
-    position_transi[1] = 0.0;
-    modelAxeMatrix.translate(position_transi);
+        program_axe->setUniformValue("projectionMatrix", projection);
+        program_axe->setUniformValue("viewMatrix", view);
+        program_axe->setUniformValue("modelMatrix", modelAxeMatrix);
 
-    program_axe->setUniformValue("projectionMatrix", projection);
-    program_axe->setUniformValue("viewMatrix", view);
-    program_axe->setUniformValue("modelMatrix", modelAxeMatrix);
+        program_axe->setUniformValue("size", 1.0f);
+        program_axe->setAttributeBuffer("in_position", GL_FLOAT ,0, 3,  6*sizeof(GLfloat));
+        program_axe->setAttributeBuffer("col", GL_FLOAT, 3*sizeof (GLfloat), 3, 6*sizeof(GLfloat));
 
-    program_axe->setUniformValue("size", 1.0f);
-    program_axe->setAttributeBuffer("in_position", GL_FLOAT ,0, 3,  6*sizeof(GLfloat));
-    program_axe->setAttributeBuffer("col", GL_FLOAT, 3*sizeof (GLfloat), 3, 6*sizeof(GLfloat));
+        program_axe->enableAttributeArray("in_position");
+        program_axe->enableAttributeArray("col");
 
-    program_axe->enableAttributeArray("in_position");
-    program_axe->enableAttributeArray("col");
+        glDrawArrays(GL_LINES, 0, 2);
 
-    glDrawArrays(GL_LINES, 0, 2);
+        program_axe->disableAttributeArray("in_position");
+        program_axe->disableAttributeArray("col");
 
-    program_axe->disableAttributeArray("in_position");
-    program_axe->disableAttributeArray("col");
-
-    program_axe->release();
-
-
-
+        program_axe->release();
+    }
 }
 
 void Drone::init(QOpenGLShaderProgram *programM, QOpenGLShaderProgram *programL, QOpenGLBuffer vboM, QOpenGLBuffer vboL){

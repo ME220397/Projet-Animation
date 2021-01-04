@@ -60,7 +60,7 @@ public:
     void delete_vbos();
     void init_shaders();
     void add_drone(int id_drone);
-    void draw(QMatrix4x4 projection, QMatrix4x4 view);
+    void draw(QMatrix4x4 projection, QMatrix4x4 view, bool show_axis);
     void create_drones();
     void draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view);
 private:

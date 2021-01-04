@@ -303,12 +303,12 @@ void DroneFactory::add_drone(int id_drone){
     drones.push_back(d);
 }
 
-void DroneFactory::draw(QMatrix4x4 projection, QMatrix4x4 view){
+void DroneFactory::draw(QMatrix4x4 projection, QMatrix4x4 view, bool show_axis){
     //vbo_line.bind();
     //vbo_mesh.bind();
     for(Drone d: drones){
         //d.init(program_mesh, program_line, vbo_mesh, vbo_line);
-        d.draw(projection, view, n_edges*2, n_faces*3);
+        d.draw(projection, view, n_edges*2, n_faces*3, show_axis);
     }
 }
 

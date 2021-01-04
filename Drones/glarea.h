@@ -26,6 +26,7 @@ public:
 protected slots:
     void onTimeout();
     void on_push_trajectory();
+    void on_push_axis();
 
 protected:
     void initializeGL() override;
@@ -59,6 +60,7 @@ private:
     DroneFactory * test;
 
     bool show_traject = true;
+    bool show_axis = true;
 };
 
 #endif // GLAREA_H

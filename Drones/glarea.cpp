@@ -217,7 +217,7 @@ void GLArea::paintGL()
     program_sol->release();
 
     // Affichage des drone
-    test->draw(projectionMatrix, viewMatrix);
+    test->draw(projectionMatrix, viewMatrix, show_axis);
     if(show_traject)
         test->draw_trajectories(projectionMatrix, viewMatrix);
 }
@@ -321,4 +321,10 @@ void GLArea::on_push_trajectory(){
     }
     else
         show_traject = true;
+}
+
+void GLArea::on_push_axis(){
+    if(show_axis)
+        show_axis = false;
+    else show_axis = true;
 }

@@ -13,5 +13,50 @@ CubeMap::CubeMap()
 }
 
 void CubeMap::loadCubeMap(){
+    // Premier billboard
+    GLfloat vertices_right[] = {
+       1.0f, -1.0f, -1.0f,
+       1.0f,-1.0f, 1.0f,
+       1.0f, 1.0f, 1.0f,
 
+       1.0f,-1.0f, -1.0f,
+       1.0f, 1.0f, 1.0f,
+       1.0f, -1.0f, 1.0f
+    };
+
+    // Deuxieme billboard
+    GLfloat vertices_left[] = {
+       -1.0f, -1.0f, 1.0f,
+       -1.0f,-1.0f, -1.0f,
+       -1.0f, 1.0f, -1.0f,
+
+       -1.0f,-1.0f, 1.0f,
+       -1.0f, 1.0f, -1.0f,
+       -1.0f, -1.0f, -1.0f
+    };
+
+    GLfloat vertices_front[] = {
+        -1.0f, -1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+
+        -1.0f,-1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f
+    };
+
+    GLfloat vertices_back[] = {
+        -1.0f, -1.0f, -1.0f,
+        1.0f,-1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+
+        -1.0f,-1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f
+    };
+
+    GLfloat vertices_bot[] = {
+        1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f,
+    };
 }
