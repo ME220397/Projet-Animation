@@ -64,11 +64,17 @@ public:
     void draw(QMatrix4x4 projection, QMatrix4x4 view, bool show_axis);
     void create_drones();
     void draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view);
+    void animate(float dt);
+    int get_id_vitesse(float temps_ecoule);
+    int get_max_frame();
+    void set_frame(int v);
+    int get_current_frame();
 private:
 
     vector<Drone> drones;
-    vector<vector<float>> temps_par_drone;
+    vector<float> temps_par_drone;
     vector<float> temps_max_drone;
+    int frame_max;
 
     int n_faces;
     int n_edges;
@@ -87,7 +93,10 @@ private:
     int nb_drones;
     QVector3D d;
 
-    std::vector<std::vector<QVector3D>> trajectories;
+    vector<vector<QVector3D>> trajectories;
+    vector<vector<QVector3D>> vitesses;
+
+    int current_frame;
 };
 
 #endif // DRONEFACTORY_H

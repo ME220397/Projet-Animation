@@ -5,6 +5,7 @@ Drone::Drone(QVector3D position, float size, float temps_restant)
     this->position = position;
     this->size = size;
     this->temps_restant = temps_restant;
+    this->temps_max = temps_restant;
 }
 
 void Drone::draw(QMatrix4x4 projection, QMatrix4x4 view, int nLines, int nFaces, bool show_axis){
@@ -98,4 +99,27 @@ void Drone::init(QOpenGLShaderProgram *programM, QOpenGLShaderProgram *programL,
 void Drone::init_axes(QOpenGLShaderProgram *programM, QOpenGLBuffer vboM){
     program_axe = programM;
     vbo_axes = vboM;
+}
+
+float Drone::get_temps_ecoule(){
+    return temps_max - temps_restant;
+}
+
+void Drone::set_vitesse(QVector3D vitesse){
+    this->vitesse = vitesse;
+}
+
+void Drone::animate(float dt, float i, float framerate){
+    if(temps_restant > 0.0f ){
+        position = position + (vitesse - position)*i/framerate;
+        temps_restant-=dt;
+    }
+}
+
+void Drone::set_position(QVector3D p){
+    position = p;
+}
+
+void Drone::set_temps_restant(float t){
+    temps_restant = temps_max - t;
 }

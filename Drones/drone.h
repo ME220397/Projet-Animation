@@ -23,12 +23,16 @@ class Drone
             return vitesse;
         }
         void set_vitesse(QVector3D vitesse);
-        void animate(float dt);
+        float get_temps_ecoule();
+        void animate(float dt, float i, float framerate);
+        void set_position(QVector3D p);
+        void set_temps_restant(float t);
     private:
         QVector3D position;
         float size;
         QVector3D vitesse;
         float temps_restant;
+        float temps_max;
 
         QOpenGLShaderProgram *program_mesh;
         QOpenGLShaderProgram *program_line;

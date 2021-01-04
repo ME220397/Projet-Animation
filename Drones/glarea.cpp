@@ -26,6 +26,8 @@ GLArea::GLArea(QWidget *parent) :
     elapsedTimer.start();
 
     test = new DroneFactory(this);
+    currentFrame = 0;
+    maxFrame = test->get_max_frame();
     repere = new Axe(this);
 }
 
@@ -228,6 +230,13 @@ void GLArea::paintGL()
     if(show_rep)
         repere->draw_repere(projectionMatrix, viewMatrix);
 
+    if(play){
+        // Animation des drones
+        test->animate(dt);
+        currentFrame = test->get_current_frame();
+        setFrame(currentFrame);
+    }
+
     // Affichage des drone
     test->draw(projectionMatrix, viewMatrix, show_axis);
     if(show_traject)
@@ -322,8 +331,6 @@ void GLArea::onTimeout()
     dt = (chrono - old_chrono) / 1000.0f;
     old_chrono = chrono;
 
-
-
     update();
 }
 
@@ -352,4 +359,28 @@ void GLArea::on_push_sol(){
     if(show_sol)
         show_sol = false;
     else show_sol = true;
+}
+
+void GLArea::on_push_play(){
+    play = true;
+}
+
+void GLArea::on_push_pause(){
+    play = false;
+}
+
+void GLArea::frameChanged(int v){
+    if(v >= maxFrame-1){
+        play = false;
+        qDebug() << "Animation mise en pause. frame = " << v;
+    }
+    test->set_frame(v);
+}
+
+int GLArea::get_max_frame(){
+    return maxFrame;
+}
+
+int GLArea::get_frame(){
+    return currentFrame;
 }

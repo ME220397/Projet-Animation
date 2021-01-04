@@ -24,12 +24,21 @@ public:
     explicit GLArea(QWidget *parent = nullptr);
     ~GLArea() override;
 
+    int get_max_frame();
+    int get_frame();
+
+signals:
+    void setRangeTL(int, int);
+    void setFrame(int);
 protected slots:
     void onTimeout();
     void on_push_trajectory();
     void on_push_axis();
     void on_push_repere();
     void on_push_sol();
+    void on_push_play();
+    void on_push_pause();
+    void frameChanged(int v);
 
 protected:
     void initializeGL() override;
@@ -67,6 +76,10 @@ private:
     bool show_axis = true;
     bool show_rep = true;
     bool show_sol = true;
+    bool play = false;
+
+    int maxFrame;
+    int currentFrame;
 };
 
 #endif // GLAREA_H

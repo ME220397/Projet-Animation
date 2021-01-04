@@ -56,6 +56,40 @@
            </widget>
           </item>
           <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="play">
+              <property name="text">
+               <string>play</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pause">
+              <property name="text">
+               <string>pause</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -71,14 +105,28 @@
          </layout>
         </item>
         <item>
-         <widget class="GLArea" name="glarea">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="rightMargin">
+           <number>0</number>
           </property>
-         </widget>
+          <item>
+           <widget class="GLArea" name="glarea">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="timeline">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>

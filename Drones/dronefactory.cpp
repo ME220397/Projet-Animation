@@ -81,23 +81,33 @@ DroneFactory::DroneFactory(QOpenGLWidget * parent)
 
     // Récuperation du framerate
     int framerate = reader->get_framerate();
-    // On recupère les temps pour chaque drone
+    // On recupère les temps de vie pour chaque drone
     for(int i=0; i<nb_drones; i++){
         int n_waypoints = reader->get_nb_waypoints(i);
-        vector<float> vec_temps;
         float temps_max = 0.0f;
         for(int j=0; j<n_waypoints; j++){
             int frame = reader->accesFrame(i, j);
             float temps = float(frame)/(float)framerate;
             if(temps_max < temps)
                 temps_max = temps;
-            vec_temps.push_back(temps);
         }
         temps_max_drone.push_back(temps_max);
-        temps_par_drone.push_back(vec_temps);
+    }
+
+    // On recupere un tableau des temps
+    int maxFrame = reader->get_max_frame();
+    for(int i = 0; i<maxFrame; i++){
+        temps_par_drone.push_back(((float)(i+1))/30.0f);
     }
 
     assert(!temps_par_drone.empty());
+
+    // On recupère les viteses des drones
+    for (int i=0; i<nb_drones;i++) {
+        vitesses.push_back(reader->compute_vitesses(i, d));
+    }
+
+    assert(!vitesses.empty());
 }
 
 void DroneFactory::create_drones(){
@@ -363,4 +373,47 @@ void DroneFactory::draw_trajectories(QMatrix4x4 projection, QMatrix4x4 view){
     program_trajectory->disableAttributeArray("col");
 
     program_trajectory->release();
+}
+
+int DroneFactory::get_id_vitesse(float temps_ecoule){
+    int n = temps_par_drone.size();
+    for(int i = 0; i<n; i++){
+        float temps = temps_par_drone.at(i);
+        if(temps_ecoule < temps){
+            qDebug() << "Temps ecoule (" << temps_ecoule << ") < temps ("<<temps << ")" ;
+            return i;
+        }
+    }
+    return -1;
+}
+void DroneFactory::animate(float dt){
+    for(int i = 0; i<nb_drones; i++){
+        float temps_ecoule = drones[i].get_temps_ecoule();
+        int id_vitesse = get_id_vitesse(temps_ecoule);
+        if(id_vitesse >= 0){
+            current_frame = id_vitesse;
+            QVector3D vitesse = vitesses[i].at(id_vitesse);
+            //qDebug() << "Vitesse = " <<  vitesse[0] << " " << vitesse[1] << " " << vitesse[2];
+            drones[i].set_vitesse(vitesse);
+            drones[i].animate(dt, (i+1), (float)reader->get_framerate());
+        }
+    }
+}
+
+int DroneFactory::get_max_frame(){
+    return reader->get_max_frame();
+}
+
+void DroneFactory::set_frame(int v){
+    current_frame = v;
+    for(int i =0; i<nb_drones; i++){
+        QVector3D p = vitesses[i].at(v);
+        float t = temps_par_drone[v];
+        drones[i].set_position(p);
+        drones[i].set_temps_restant(t);
+    }
+}
+
+int DroneFactory::get_current_frame(){
+    return current_frame;
 }

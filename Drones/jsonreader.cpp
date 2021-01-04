@@ -144,3 +144,40 @@ int JsonReader::get_nb_waypoints(int id_drone){
 int JsonReader::get_framerate(){
     return framerate;
 }
+
+int JsonReader::get_max_frame(){
+    int maxFrame = 0;
+
+    for(int i=0; i<nbDrones; i++){
+        int n = get_nb_waypoints(i);
+        for(int j=0; j<n;j++){
+            int frame = accesFrame(i, j);
+            if(maxFrame < frame){
+                maxFrame = frame;
+            }
+        }
+    }
+
+    return maxFrame;
+}
+std::vector<QVector3D> JsonReader::compute_vitesses(int id_drone, QVector3D translate){
+
+    std::vector<QVector3D> vitesses;
+    int n_waypoints = get_nb_waypoints(id_drone);
+    int n = get_max_frame();
+
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j < n_waypoints; j++){
+            int frame = accesFrame(id_drone, j);
+            if(i <= frame){
+                QVector3D p = accessPosition(id_drone, j);
+                p += translate;
+                p /= 40.0f;
+                QVector3D vitesse = p;
+                vitesses.push_back(vitesse);
+                break;
+            }
+        }
+    }
+    return vitesses;
+}
