@@ -26,6 +26,7 @@ GLArea::GLArea(QWidget *parent) :
     elapsedTimer.start();
 
     test = new DroneFactory(this);
+    repere = new Axe(this);
 }
 
 
@@ -70,6 +71,7 @@ void GLArea::initializeGL()
     program_particule->setUniformValue("texture", 0);
 
     test->init_shaders();
+    repere->init_shaders();
 }
 
 
@@ -158,6 +160,7 @@ void GLArea::makeGLObjects()
 
     test->loadMesh();
     test->create_drones();
+    repere->load_repere();
 }
 
 
@@ -194,7 +197,7 @@ void GLArea::paintGL()
     viewMatrix.rotate(zRot, 0, 0, 1);
 
     // Affichage du sol
-    vbo_sol.bind();
+    /*vbo_sol.bind();
     program_sol->bind(); // active le shader program du sol
 
     QMatrix4x4 modelMatrixSol;
@@ -214,12 +217,15 @@ void GLArea::paintGL()
 
     program_sol->disableAttributeArray("in_position");
     program_sol->disableAttributeArray("in_uv");
-    program_sol->release();
+    program_sol->release();*/
 
     // Affichage des drone
     test->draw(projectionMatrix, viewMatrix);
     if(show_traject)
         test->draw_trajectories(projectionMatrix, viewMatrix);
+
+    // Affichage du repere
+    repere->draw_repere(projectionMatrix, viewMatrix);
 }
 
 

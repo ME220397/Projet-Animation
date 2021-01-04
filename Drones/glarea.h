@@ -13,6 +13,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 #include <dronefactory.h>
+#include <axe.h>
 
 class GLArea : public QOpenGLWidget,
                protected QOpenGLFunctions
@@ -57,6 +58,7 @@ private:
     void tearGLObjects();
 
     DroneFactory * test;
+    Axe * repere;
 
     bool show_traject = true;
 };
