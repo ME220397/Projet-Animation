@@ -31,6 +31,7 @@ macx: {
 
 SOURCES += main.cpp\
         axe.cpp \
+        cubemap.cpp \
         drone.cpp \
         dronefactory.cpp \
         helper.cpp \
@@ -40,6 +41,7 @@ SOURCES += main.cpp\
 
 HEADERS  += princ.h \
         axe.h \
+        cubemap.h \
         drone.h \
         dronefactory.h \
         glarea.h \
