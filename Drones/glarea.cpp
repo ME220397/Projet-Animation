@@ -29,6 +29,7 @@ GLArea::GLArea(QWidget *parent) :
     currentFrame = 0;
     maxFrame = test->get_max_frame();
     repere = new Axe(this);
+    cube = new CubeMap(this);
 }
 
 
@@ -74,6 +75,7 @@ void GLArea::initializeGL()
 
     repere->init_shaders();
     test->init_shaders();
+    cube->init_shader();
 
 }
 
@@ -165,6 +167,8 @@ void GLArea::makeGLObjects()
 
     test->loadMesh();
     test->create_drones();
+
+    cube->loadCubeMap();
 }
 
 
@@ -174,6 +178,7 @@ void GLArea::tearGLObjects()
     vbo_particule.destroy();
     test->delete_vbos();
     repere->destroy_vbo();
+    cube->destroy_vbo();
     for (int i = 0; i < 2; i++)
         delete textures[i];
 }
@@ -229,6 +234,9 @@ void GLArea::paintGL()
     // Affichage du repere
     if(show_rep)
         repere->draw_repere(projectionMatrix, viewMatrix);
+
+    // Affichage de la skybox;
+    //cube->draw(projectionMatrix, viewMatrix);
 
     if(play){
         // Animation des drones

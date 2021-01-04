@@ -14,6 +14,7 @@
 #include <QOpenGLTexture>
 #include <dronefactory.h>
 #include <axe.h>
+#include <cubemap.h>
 
 class GLArea : public QOpenGLWidget,
                protected QOpenGLFunctions
@@ -80,6 +81,8 @@ private:
 
     int maxFrame;
     int currentFrame;
+
+    CubeMap * cube;
 };
 
 #endif // GLAREA_H
