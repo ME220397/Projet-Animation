@@ -44,7 +44,7 @@ GLArea::~GLArea()
 void GLArea::initializeGL()
 {
     initializeOpenGLFunctions();
-    glClearColor(0.5f,0.5f,1.0f,1.0f);
+    glClearColor(0.1f,0.4f,1.0f,1.0f);
     glEnable(GL_DEPTH_TEST);
 
     makeGLObjects();
